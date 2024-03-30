@@ -297,3 +297,11 @@ footer .input-group-text {
   right: 15px;
 }
 /*Product Card Ends*/
+
+/*Special Product*/
+.special-product-card {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+/*Special Product Ends*/
