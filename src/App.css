@@ -340,7 +340,7 @@ footer .input-group-text {
 .filter-card {
   background-color: white;
   border-radius: 10px;
-  padding: 10px 15px;
+  padding: 15px 15px 25px;
 }
 .filter-title {
   font-size: 16px;
@@ -370,6 +370,25 @@ footer .input-group-text {
   font-weight: 600;
   color: var(--color-1c1c1b);
   margin-bottom: 15px;
-  margin-top: 15px;
+  margin-top: 20px;
+}
+.colors {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.colors li {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+}
+.random-products h5 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.random-products:first-child {
+  border-bottom: 1px solid var(--color-ededed);
 }
 /*Our Store Ends*/
