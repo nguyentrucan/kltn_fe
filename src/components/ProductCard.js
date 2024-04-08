@@ -24,6 +24,9 @@ const ProductCard = (props) => {
                             Kids headphones bulk 10 pack multi colored for students
                         </h5>
                         <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                        <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}>
+                            OPPO Reno11 F 5G là một chiếc điện thoại tầm trung mới được OPPO ra mắt trong thời gian gần đây. Máy sở hữu nhiều ưu điểm nổi bật như thiết kế trẻ trung, màn hình đẹp, hiệu năng mạnh mẽ nhờ chip Dimensity 7050 5G, hứa hẹn mang đến trải nghiệm tốt khi sử dụng.
+                        </p>
                         <p className='price'>$100.00</p>
                     </div>
                     <div className='action-bar position-absolute'>
@@ -61,6 +64,9 @@ const ProductCard = (props) => {
                             Kids headphones bulk 10 pack multi colored for students
                         </h5>
                         <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                        <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}>
+                            OPPO Reno11 F 5G là một chiếc điện thoại tầm trung mới được OPPO ra mắt trong thời gian gần đây. Máy sở hữu nhiều ưu điểm nổi bật như thiết kế trẻ trung, màn hình đẹp, hiệu năng mạnh mẽ nhờ chip Dimensity 7050 5G, hứa hẹn mang đến trải nghiệm tốt khi sử dụng.
+                        </p>
                         <p className='price'>$100.00</p>
                     </div>
                     <div className='action-bar position-absolute'>
