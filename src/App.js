@@ -12,6 +12,7 @@ import Wishlist from './pages/Wishlist';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Forgotpassword from './pages/Forgotpassword';
+import Resetpassword from './pages/Resetpassword';
 const App = () => {
   return (
     <>
@@ -28,6 +29,7 @@ const App = () => {
             <Route path='login' element={<Login />} />
             <Route path='signup' element={<Signup />} />
             <Route path='forgot-password' element={<Forgotpassword />} />
+            <Route path='reset-password' element={<Resetpassword />} />
           </Route>
         </Routes>
       </BrowserRouter>
