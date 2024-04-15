@@ -3,8 +3,10 @@ import BreadCrumb from '../components/BreadCrumb'
 import React, { useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import ReactStars from "react-rating-stars-component"
+import ReactImageZoom from 'react-image-zoom'
 
 const SingleProduct = () => {
+    const props = { width: 400, height: 500, zoomWidth: 500, img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg" };
     const [orderedProduct, setorderedProduct] = useState(true)
     return (
         <>
@@ -13,7 +15,27 @@ const SingleProduct = () => {
             <div className='main-product-wrapper py-5 home-wrapper-2'>
                 <div className='container-xxl'>
                     <div className='row'>
-                        <div className='col-6'></div>
+                        <div className='col-6'>
+                            <div className='main-product-image'>
+                                <div>
+                                    <ReactImageZoom {...props} />
+                                </div>
+                            </div>
+                            <div className='other-product-images d-flex flex-wrap gap-15'>
+                                <div>
+                                    <img src='/images/watch.jpg' className='img-fluid' alt='' />
+                                </div>
+                                <div>
+                                    <img src='/images/watch.jpg' className='img-fluid' alt='' />
+                                </div>
+                                <div>
+                                    <img src='/images/watch.jpg' className='img-fluid' alt='' />
+                                </div>
+                                <div>
+                                    <img src='/images/watch.jpg' className='img-fluid' alt='' />
+                                </div>
+                            </div>
+                        </div>
                         <div className='col-6'></div>
                     </div>
                 </div>
@@ -22,18 +44,19 @@ const SingleProduct = () => {
                 <div className='container-xxl'>
                     <div className='row'>
                         <div className='col-12'>
+                            <h4>Description</h4>
                             <div className='bg-white p-3'>
-                                <h4>Description</h4>
                                 <p>oghnfognhdnh dnghongohndfio hjosdgjnfohjnfdoh dfnghmojkdnshoj</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <section className='reviews-wrapper py-5 home-wrapper-2'>
+            <section className='reviews-wrapper home-wrapper-2'>
                 <div className='container-xxl'>
                     <div className='row'>
                         <div className='col-12'>
+                            <h3>Reviews</h3>
                             <div className='review-inner-wrapper'>
                                 <div className='review-head d-flex justify-content-between align-items-end'>
                                     <div>
@@ -62,6 +85,15 @@ const SingleProduct = () => {
                                             <button className='button border-0'>Submit Review</button>
                                         </div>
                                     </form>
+                                </div>
+                                <div className='reviews mt-4'>
+                                    <div className='review'>
+                                        <div className='d-flex gap-10 align-items-center'>
+                                            <h6 className='mb-0'>Nguyen An</h6>
+                                            <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                                        </div>
+                                        <p className='mt-3'>fgijdnfijgndigneijgndfkjgndkgndkgndfkgndkgndfk</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
