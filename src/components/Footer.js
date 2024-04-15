@@ -42,13 +42,13 @@ const Footer = () => {
                                 </a>
                                 <div className='social_icons d-flex align-items-center gap-30 mt-4'>
                                     <a className='text-white' href='https://www.linkedin.com/in/an-nguy%E1%BB%85n-tr%C3%BAc-b301a22bb/'>
-                                        <BsLinkedin className='fs-4'/>
+                                        <BsLinkedin className='fs-4' />
                                     </a>
                                     <a className='text-white' href='https://github.com/nguyentrucan'>
-                                        <BsGithub className='fs-4'/>
+                                        <BsGithub className='fs-4' />
                                     </a>
                                     <a className='text-white' href='https://www.facebook.com/ntan110802/'>
-                                        <BsFacebook className='fs-4'/>
+                                        <BsFacebook className='fs-4' />
                                     </a>
                                 </div>
                             </div>
@@ -56,10 +56,11 @@ const Footer = () => {
                         <div className='col-3'>
                             <h4 className='text-white mb-4'>Information</h4>
                             <div className='footer-links d-flex flex-column'>
-                                <Link className='text-white py-2 mb-1'>Privacy Policy</Link>
-                                <Link className='text-white py-2 mb-1'>Refund Policy</Link>
-                                <Link className='text-white py-2 mb-1'>Terms & Conditions</Link>
-                                <Link className='text-white py-2 mb-1'>Blogs</Link>
+                                <Link to='/privacy-policy' className='text-white py-2 mb-1'>Privacy Policy</Link>
+                                <Link to='/refund-policy' className='text-white py-2 mb-1'>Refund Policy</Link>
+                                <Link to='/shipping-policy' className='text-white py-2 mb-1'>Shipping Policy</Link>
+                                <Link to='/term-conditions' className='text-white py-2 mb-1'>Terms & Conditions</Link>
+                                <Link to='/blogs' className='text-white py-2 mb-1'>Blogs</Link>
                             </div>
                         </div>
                         <div className='col-3'>
