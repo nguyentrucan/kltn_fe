@@ -17,9 +17,9 @@ const ProductCard = (props) => {
             <div className={`${location.pathname === '/store' ? `gr-${grid}` : 'col-3'}`}>
                 <Link to='/product/:id' className='product-card position-relative'>
                     <div className='wishlist-icon position-absolute'>
-                        <Link>
+                        <button className='border-0 bg-transparent'>
                             <img src={wish} alt='wishlist' />
-                        </Link>
+                        </button>
                     </div>
                     <div className='product-image'>
                         <img src={watch} className='img-fluid' alt='productimage' />
@@ -30,7 +30,7 @@ const ProductCard = (props) => {
                         <h5 className='product-title'>
                             Kids headphones bulk 10 pack multi colored for students
                         </h5>
-                        <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                         <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}>
                             OPPO Reno11 F 5G là một chiếc điện thoại tầm trung mới được OPPO ra mắt trong thời gian gần đây. Máy sở hữu nhiều ưu điểm nổi bật như thiết kế trẻ trung, màn hình đẹp, hiệu năng mạnh mẽ nhờ chip Dimensity 7050 5G, hứa hẹn mang đến trải nghiệm tốt khi sử dụng.
                         </p>
@@ -38,15 +38,15 @@ const ProductCard = (props) => {
                     </div>
                     <div className='action-bar position-absolute'>
                         <div className='d-flex flex-column gap-15'>
-                            <Link>
+                            <button className='border-0 bg-transparent'>
                                 <img src={prodcompare} alt='compare' />
-                            </Link>
-                            <Link>
+                            </button>
+                            <button className='border-0 bg-transparent'>
                                 <img src={view} alt='view' />
-                            </Link>
-                            <Link>
+                            </button>
+                            <button className='border-0 bg-transparent'>
                                 <img src={addcart} alt='addcart' />
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </Link>
@@ -54,9 +54,9 @@ const ProductCard = (props) => {
             <div className={`${location.pathname === '/store' ? `gr-${grid}` : 'col-3'}`}>
                 <Link className='product-card position-relative'>
                     <div className='wishlist-icon position-absolute'>
-                        <Link>
+                        <button className='border-0 bg-transparent'>
                             <img src={wish} alt='wishlist' />
-                        </Link>
+                        </button>
                     </div>
                     <div className='product-image'>
                         <img src={watch} className='img-fluid' alt='productimage' />
@@ -67,7 +67,7 @@ const ProductCard = (props) => {
                         <h5 className='product-title'>
                             Kids headphones bulk 10 pack multi colored for students
                         </h5>
-                        <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                         <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}>
                             OPPO Reno11 F 5G là một chiếc điện thoại tầm trung mới được OPPO ra mắt trong thời gian gần đây. Máy sở hữu nhiều ưu điểm nổi bật như thiết kế trẻ trung, màn hình đẹp, hiệu năng mạnh mẽ nhờ chip Dimensity 7050 5G, hứa hẹn mang đến trải nghiệm tốt khi sử dụng.
                         </p>
@@ -75,15 +75,15 @@ const ProductCard = (props) => {
                     </div>
                     <div className='action-bar position-absolute'>
                         <div className='d-flex flex-column gap-15'>
-                            <Link>
+                            <button className='border-0 bg-transparent'>
                                 <img src={prodcompare} alt='compare' />
-                            </Link>
-                            <Link>
+                            </button>
+                            <button className='border-0 bg-transparent'>
                                 <img src={view} alt='view' />
-                            </Link>
-                            <Link>
+                            </button>
+                            <button className='border-0 bg-transparent'>
                                 <img src={addcart} alt='addcart' />
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </Link>

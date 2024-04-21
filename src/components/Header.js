@@ -78,7 +78,7 @@ const Header = () => {
             <div className='col-12'>
               <div className='menu-bottom d-flex align-items-center gap-30'>
                 <div>
-                  <div class="dropdown">
+                  <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle bg-transparent border-0 gap-15 d-flex align-items-center" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                       <img src={menu} alt='' />
                       <span className='me-5 d-inline-block'>Shop Categories</span>
