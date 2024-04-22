@@ -4,6 +4,7 @@ import BreadCrumb from '../components/BreadCrumb'
 import { AiOutlineHome, AiOutlineMail } from 'react-icons/ai'
 import { BiInfoCircle, BiPhoneCall } from 'react-icons/bi'
 import Container from '../components/Container'
+import CustomInput from '../components/CustomInput'
 
 const Contact = () => {
     return (
@@ -20,15 +21,9 @@ const Contact = () => {
                             <div>
                                 <h3 className='contact-title mb-4'>Contact</h3>
                                 <form action='' className='d-flex flex-column gap-15'>
-                                    <div>
-                                        <input type='text' className='form-control' placeholder='Name' />
-                                    </div>
-                                    <div>
-                                        <input type='email' className='form-control' placeholder='Email' />
-                                    </div>
-                                    <div>
-                                        <input type='tel' className='form-control' placeholder='Mobile' />
-                                    </div>
+                                    <CustomInput type='text' placeholder='Name' />
+                                    <CustomInput type='email' placeholder='Email' />
+                                    <CustomInput type='tel' placeholder='Mobile' />
                                     <div>
                                         <textarea className='w-100 form-control' id='' cols='30' rows='4' placeholder='Comments'></textarea>
                                     </div>
