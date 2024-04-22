@@ -57,7 +57,7 @@ const SingleProduct = () => {
                             <div className='border-bottom py-3'>
                                 <p className='price'>$ 100</p>
                                 <div className='d-flex align-items-center gap-10'>
-                                    <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                                    <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                                     <p className='mb-0 t-review'>(2 Reviews)</p>
                                 </div>
                                 <a className='review-btn' href='#review'>Write a Review</a>
@@ -146,7 +146,7 @@ const SingleProduct = () => {
                                 <div>
                                     <h4 className='mb-2'>Customer Reviews</h4>
                                     <div className='d-flex align-items-center gap-10'>
-                                        <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                                         <p className='mb-0'>Based on 2 Reviews</p>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@ const SingleProduct = () => {
                                 <h4>Write a Review</h4>
                                 <form action='' className='d-flex flex-column gap-15'>
                                     <div>
-                                        <ReactStars count={5} size={24} value='3' edit={true} activeColor="#ffd700" />
+                                        <ReactStars count={5} size={24} value={3} edit={true} activeColor="#ffd700" />
                                     </div>
                                     <div>
                                         <textarea className='w-100 form-control' id='' cols='30' rows='4' placeholder='Comments'></textarea>
@@ -174,7 +174,7 @@ const SingleProduct = () => {
                                 <div className='review'>
                                     <div className='d-flex gap-10 align-items-center'>
                                         <h6 className='mb-0'>Nguyen An</h6>
-                                        <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                                     </div>
                                     <p className='mt-3'>fgijdnfijgndigneijgndfkjgndkgndkgndfkgndkgndfk</p>
                                 </div>

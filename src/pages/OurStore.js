@@ -106,7 +106,7 @@ const OurStore = () => {
                                         <h5>
                                             Kids headphones bulk 10 pack multi colored for students
                                         </h5>
-                                        <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                                         <b>$ 300</b>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@ const OurStore = () => {
                                         <h5>
                                             Kids headphones bulk 10 pack multi colored for students
                                         </h5>
-                                        <ReactStars count={5} size={24} value='3' edit={false} activeColor="#ffd700" />
+                                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
                                         <b>$ 300</b>
                                     </div>
                                 </div>
@@ -131,6 +131,8 @@ const OurStore = () => {
                                 <div className='d-flex align-items-center gap-10'>
                                     <p className='mb-0 d-block' style={{ width: "100px" }}>Sort By:</p>
                                     <select name='' className='form-control form-select' id=''>
+                                        <option value='manual'>Featured</option>
+                                        <option value='best-selling'>Best Selling</option>
                                         <option value='title-ascending'>Alphabetically, A-Z</option>
                                         <option value='title descending'>Alphabetically, Z-A</option>
                                         <option value='price-ascending'>Price, low to high</option>

@@ -40,8 +40,8 @@ const Checkout = () => {
                             <h4 className='mb-3'>Shipping Address</h4>
                             <form action='' className='d-flex gap-15 flex-wrap justify-content-between'>
                                 <div className='w-100'>
-                                    <select name='' className='form-control form-select' id=''>
-                                        <option value='' selected disabled>
+                                    <select name='' className='form-control form-select' id='' defaultValue={''}>
+                                        <option value='' disabled>
                                             Select Country
                                         </option>
                                     </select>
@@ -62,8 +62,8 @@ const Checkout = () => {
                                     <input type='text' placeholder='City' className='form-control' />
                                 </div>
                                 <div className='flex-grow-1'>
-                                    <select name='' className='form-control form-select' id=''>
-                                        <option value='' selected disabled>
+                                    <select name='' className='form-control form-select' defaultValue={''} id=''>
+                                        <option value='' disabled>
                                             Select State
                                         </option>
                                     </select>
