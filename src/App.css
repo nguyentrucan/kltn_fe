@@ -716,7 +716,7 @@ footer .input-group-text {
 .cart-col-1 {
   width: 40%;
 }
-.cart-col-1 p{
+.cart-col-1 p {
   color: var(--color-777777);
   font-size: 14px;
 }
@@ -729,19 +729,24 @@ footer .input-group-text {
 .cart-col-4 {
   width: 15%;
 }
-.cart-data h5.price{
+.cart-data h5.price {
   font-size: 14px;
   color: var(--color-1c1c1b);
 }
 /*Cart Page Ends*/
 
 /*Shipping Page*/
-.total{
+.total {
   font-size: 14px;
   color: var(--color-1c1c1b);
 }
-.total-price{
+.total-price {
   font-size: 16px;
   color: var(--color-777777);
 }
 /*Shipping Page Ends*/
+
+.error {
+  color: red;
+  font-size: 12px;
+}

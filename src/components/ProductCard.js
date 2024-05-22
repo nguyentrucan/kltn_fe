@@ -8,99 +8,90 @@ import watch from '../images/watch.jpg'
 import watch2 from '../images/watch-01.jpg'
 import addcart from '../images/add-cart.svg'
 import view from '../images/view.svg'
+import { useDispatch } from 'react-redux'
+import { addToWishList } from '../features/products/productSlice'
 
 const ProductCard = (props) => {
-    const { grid } = props
+    const { data, grid } = props
+    const dispatch = useDispatch()
+    const addToWishListed = (id) => {
+        dispatch(addToWishList(id))
+    }
+
     let location = useLocation();
     return (
         <>
-            <div className={`${location.pathname === '/product' ? `gr-${grid}` : 'col-3'}`}>
-                <Link
-                    to={`${location.pathname == '/'
-                        ? '/product/:id'
-                        : location.pathname == '/product/:id'
-                            ? '/product/:id'
-                            : ':id'
-                        }`}
-                    className='product-card position-relative'>
-                    <div className='wishlist-icon position-absolute'>
-                        <button className='border-0 bg-transparent'>
-                            <img src={wish} alt='wishlist' />
-                        </button>
-                    </div>
-                    <div className='product-image'>
-                        <img src={watch} className='img-fluid' alt='productimage' />
-                        <img src={watch2} className='img-fluid' alt='productimage' />
-                    </div>
-                    <div className='product-details'>
-                        <h6 className='brand'>Havels</h6>
-                        <h5 className='product-title'>
-                            Kids headphones bulk 10 pack multi colored for students
-                        </h5>
-                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
-                        <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}>
-                            OPPO Reno11 F 5G là một chiếc điện thoại tầm trung mới được OPPO ra mắt trong thời gian gần đây. Máy sở hữu nhiều ưu điểm nổi bật như thiết kế trẻ trung, màn hình đẹp, hiệu năng mạnh mẽ nhờ chip Dimensity 7050 5G, hứa hẹn mang đến trải nghiệm tốt khi sử dụng.
-                        </p>
-                        <p className='price'>$100.00</p>
-                    </div>
-                    <div className='action-bar position-absolute'>
-                        <div className='d-flex flex-column gap-15'>
-                            <button className='border-0 bg-transparent'>
-                                <img src={prodcompare} alt='compare' />
-                            </button>
-                            <button className='border-0 bg-transparent'>
-                                <img src={view} alt='view' />
-                            </button>
-                            <button className='border-0 bg-transparent'>
-                                <img src={addcart} alt='addcart' />
-                            </button>
+            {
+                data?.map((item, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className={`${location.pathname === '/product' ? `gr-${grid}` : 'col-3'}`}>
+                            <Link
+                                // to={`${location.pathname == '/'
+                                //     ? '/product/:id'
+                                //     : location.pathname == '/product/:id'
+                                //         ? '/product/:id'
+                                //         : ':id'
+                                //     }`}
+                                className='product-card position-relative'>
+                                {/* Add Wishlist */}
+                                <div className='wishlist-icon position-absolute'>
+                                    <button
+                                        onClick={() => { addToWishListed(item?._id) }}
+                                        className='border-0 bg-transparent'>
+                                        <img src={wish} alt='wishlist' />
+                                    </button>
+                                </div>
+                                {/* Product Image */}
+                                <div className='product-image'>
+                                    <img
+                                        src={item?.images[0].url}
+                                        className='img-fluid mx-auto' alt='productimage' />
+                                    <img
+                                        src={item?.images[0].url}
+                                        className='img-fluid mx-auto' alt='productimage' />
+                                </div>
+                                {/* Product Details */}
+                                <div className='product-details'>
+                                    {/* Brand */}
+                                    <h6 className='brand'>{item?.brand}</h6>
+                                    {/* Title */}
+                                    <h5 className='product-title'>
+                                        {item?.title}
+                                    </h5>
+                                    {/* Rate */}
+                                    <ReactStars
+                                        count={5}
+                                        size={24}
+                                        value={item?.totalrating.toString(Number)}
+                                        edit={false} activeColor="#ffd700" />
+                                    {/* Desc */}
+                                    <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}
+                                        dangerouslySetInnerHTML={{ __html: item?.description }}>
+
+                                    </p>
+                                    {/* Price */}
+                                    <p className='price'>$ {item?.price}</p>
+                                </div>
+                                <div className='action-bar position-absolute'>
+                                    <div className='d-flex flex-column gap-15'>
+                                        <button className='border-0 bg-transparent'>
+                                            <img src={prodcompare} alt='compare' />
+                                        </button>
+                                        <button className='border-0 bg-transparent'>
+                                            <img src={view} alt='view' />
+                                        </button>
+                                        <button className='border-0 bg-transparent'>
+                                            <img src={addcart} alt='addcart' />
+                                        </button>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
-                    </div>
-                </Link>
-            </div>
-            <div className={`${location.pathname === '/product' ? `gr-${grid}` : 'col-3'}`}>
-                <Link to={`${location.pathname == '/'
-                    ? '/product/:id'
-                    : location.pathname == '/product/:id'
-                        ? '/product/:id'
-                        : ':id'
-                    }`}
-                    className='product-card position-relative'>
-                    <div className='wishlist-icon position-absolute'>
-                        <button className='border-0 bg-transparent'>
-                            <img src={wish} alt='wishlist' />
-                        </button>
-                    </div>
-                    <div className='product-image'>
-                        <img src={watch} className='img-fluid' alt='productimage' />
-                        <img src={watch2} className='img-fluid' alt='productimage' />
-                    </div>
-                    <div className='product-details'>
-                        <h6 className='brand'>Havels</h6>
-                        <h5 className='product-title'>
-                            Kids headphones bulk 10 pack multi colored for students
-                        </h5>
-                        <ReactStars count={5} size={24} value={3} edit={false} activeColor="#ffd700" />
-                        <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}>
-                            OPPO Reno11 F 5G là một chiếc điện thoại tầm trung mới được OPPO ra mắt trong thời gian gần đây. Máy sở hữu nhiều ưu điểm nổi bật như thiết kế trẻ trung, màn hình đẹp, hiệu năng mạnh mẽ nhờ chip Dimensity 7050 5G, hứa hẹn mang đến trải nghiệm tốt khi sử dụng.
-                        </p>
-                        <p className='price'>$100.00</p>
-                    </div>
-                    <div className='action-bar position-absolute'>
-                        <div className='d-flex flex-column gap-15'>
-                            <button className='border-0 bg-transparent'>
-                                <img src={prodcompare} alt='compare' />
-                            </button>
-                            <button className='border-0 bg-transparent'>
-                                <img src={view} alt='view' />
-                            </button>
-                            <button className='border-0 bg-transparent'>
-                                <img src={addcart} alt='addcart' />
-                            </button>
-                        </div>
-                    </div>
-                </Link>
-            </div>
+                    )
+                })
+            }
         </>
     )
 }
