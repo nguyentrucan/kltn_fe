@@ -1,5 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import Marquee from "react-fast-marquee";
 import BlogCard from '../components/BlogCard';
 import ProductCard from '../components/ProductCard';
@@ -7,8 +8,36 @@ import SpecialProduct from '../components/SpecialProduct';
 import Meta from '../components/Meta';
 import Container from '../components/Container';
 import { services } from '../utils/Data';
+import moment from 'moment'
+import { useEffect } from 'react';
+import { getAllBlogs } from '../features/blogs/blogSlice';
+import { addToWishList, getAllProducts } from '../features/products/productSlice';
+import ReactStars from "react-rating-stars-component"
+import prodcompare from '../images/prodcompare.svg'
+import wish from '../images/wish.svg'
+import wishlist from '../images/wishlist.svg'
+import addcart from '../images/add-cart.svg'
+import view from '../images/view.svg'
 
 const Home = () => {
+  const blogState = useSelector((state) => state?.blog?.blogs)
+  const productState = useSelector((state) => state.product.products)
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    getBlogs()
+    getProducts()
+  }, [])
+  const getBlogs = () => {
+    dispatch(getAllBlogs())
+  }
+  const getProducts = () => {
+    dispatch(getAllProducts())
+  }
+  const addToWishListed = (id) => {
+    dispatch(addToWishList(id))
+  }
   return (
     <>
       <Meta title={"Home"} />
@@ -148,17 +177,78 @@ const Home = () => {
           </div>
         </div>
       </Container>
+
       <Container class1='featured-wrapper py-5 home-wrapper-2'>
         <div className='row'>
           <div className='col-12'>
             <h3 className='Container-heading'>Featured Collection</h3>
           </div>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {
+            productState && productState?.map((item, index) => {
+              if (item.tags === 'featured') {
+                return (
+                  <div key={index} className='col-3'>
+                    <div
+                      className='product-card position-relative'>
+                      {/* Add Wishlist */}
+                      <div className='wishlist-icon position-absolute'>
+                        <button
+                          onClick={() => { addToWishListed(item?._id) }}
+                          className='border-0 bg-transparent'>
+                          <img src={wish} alt='wishlist' />
+                        </button>
+                      </div>
+                      {/* Product Image */}
+                      <div className='product-image'>
+                        <img
+                          src={item?.images[0].url}
+                          className='img-fluid mx-auto' alt='productimage' />
+                        <img
+                          src={item?.images[0].url}
+                          className='img-fluid mx-auto' alt='productimage' />
+                      </div>
+                      {/* Product Details */}
+                      <div className='product-details'>
+                        {/* Brand */}
+                        <h6 className='brand'>{item?.brand}</h6>
+                        {/* Title */}
+                        <h5 className='product-title'>
+                          {item?.title}
+                        </h5>
+                        {/* Rate */}
+                        <ReactStars
+                          count={5}
+                          size={24}
+                          value={item?.totalrating.toString(Number)}
+                          edit={false} activeColor="#ffd700" />
+                        {/* Desc */}
+
+                        {/* Price */}
+                        <p className='price'>$ {item?.price}</p>
+                      </div>
+                      <div className='action-bar position-absolute'>
+                        <div className='d-flex flex-column gap-15'>
+                          <button className='border-0 bg-transparent'>
+                            <img src={prodcompare} alt='compare' />
+                          </button>
+                          <button className='border-0 bg-transparent'>
+                            <img onClick={() => navigate("/product/" + item?._id)} src={view} alt='view' />
+                          </button>
+                          <button className='border-0 bg-transparent'>
+                            <img src={addcart} alt='addcart' />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            })
+          }
         </div>
       </Container>
+
+      {/* Featured Collection */}
       <Container class1='famous-wrapper py-5 home-wrapper-2'>
         <div className='row'>
           <div className='col-3'>
@@ -203,6 +293,8 @@ const Home = () => {
           </div>
         </div>
       </Container>
+
+      {/* Special Products */}
       <Container class1='special-wrapper py-5 home-wrapper-2'>
         <div className='row'>
           <div className='col-12'>
@@ -210,26 +302,103 @@ const Home = () => {
           </div>
         </div>
         <div className='row'>
-          <SpecialProduct />
-          <SpecialProduct />
-          <SpecialProduct />
-          <SpecialProduct />
+          {
+            productState && productState?.map((item, index) => {
+              if (item.tags === 'special') {
+                return (
+                  <SpecialProduct
+                    key={index}
+                    id={item?._id}
+                    title={item?.title}
+                    brand={item?.brand}
+                    totalrating={item?.totalrating.toString()}
+                    images={item?.images[0].url}
+                    price={item?.price}
+                    sold={item?.sold}
+                    quantity={item?.quantity}
+                  />
+                )
+              }
+            })
+          }
         </div>
       </Container>
+
+      {/* Our Popular Products */}
       <Container class1='popular-wrapper py-5 home-wrapper-2'>
         <div className='row'>
           <div className='col-12'>
-            <h3 className='Container-heading'>Our Popular Products</h3>
+            <h3 className='section-heading'>Our Popular Products</h3>
           </div>
         </div>
         <div className='row'>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {
+            productState && productState?.map((item, index) => {
+              if (item.tags === 'popular') {
+                return (
+                  <div key={index} className='col-3'>
+                    <div
+                      className='product-card position-relative'>
+                      {/* Add Wishlist */}
+                      <div className='wishlist-icon position-absolute'>
+                        <button
+                          onClick={() => { addToWishListed(item?._id) }}
+                          className='border-0 bg-transparent'>
+                          <img src={wish} alt='wishlist' />
+                        </button>
+                      </div>
+                      {/* Product Image */}
+                      <div className='product-image'>
+                        <img
+                          src={item?.images[0].url}
+                          className='img-fluid mx-auto' alt='productimage' />
+                        <img
+                          src={item?.images[0].url}
+                          className='img-fluid mx-auto' alt='productimage' />
+                      </div>
+                      {/* Product Details */}
+                      <div className='product-details'>
+                        {/* Brand */}
+                        <h6 className='brand'>{item?.brand}</h6>
+                        {/* Title */}
+                        <h5 className='product-title'>
+                          {item?.title}
+                        </h5>
+                        {/* Rate */}
+                        <ReactStars
+                          count={5}
+                          size={24}
+                          value={item?.totalrating.toString(Number)}
+                          edit={false} activeColor="#ffd700" />
+                        {/* Desc */}
+
+                        {/* Price */}
+                        <p className='price'>$ {item?.price}</p>
+                      </div>
+                      <div className='action-bar position-absolute'>
+                        <div className='d-flex flex-column gap-15'>
+                          <button className='border-0 bg-transparent'>
+                            <img src={prodcompare} alt='compare' />
+                          </button>
+                          <button className='border-0 bg-transparent'>
+                            <img onClick={() => navigate("/product/" + item?._id)} src={view} alt='view' />
+                          </button>
+                          <button className='border-0 bg-transparent'>
+                            <img src={addcart} alt='addcart' />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            })
+          }
         </div>
       </Container>
-      <Container class1='marque-wrapper py-5'>
+
+      {/* Brand */}
+      <Container class1='marque-wrapper home-wrapper-2 py-5'>
         <div className='row'>
           <div className='col-12'>
             <div className='marquee-inner-wrapper card-wrapper'>
@@ -263,24 +432,31 @@ const Home = () => {
           </div>
         </div>
       </Container>
+
+      {/* Blog */}
       <Container class1='blog-wrapper py-5 home-wrapper-2'>
         <div className='row'>
           <div className='col-12'>
             <h3 className='Container-heading'>Our Lastest Blogs</h3>
           </div>
           <div className='row'>
-            <div className='col-3'>
-              <BlogCard />
-            </div>
-            <div className='col-3'>
-              <BlogCard />
-            </div>
-            <div className='col-3'>
-              <BlogCard />
-            </div>
-            <div className='col-3'>
-              <BlogCard />
-            </div>
+            {
+              blogState && blogState?.map((item, index) => {
+                if (index < 3) {
+                  return (
+                    <div key={index} className='col-3'>
+                      <BlogCard
+                        id={item?._id}
+                        title={item?.title}
+                        description={item?.description}
+                        image={item?.images[0].url}
+                        date={moment(item?.createdAt).format("MMMM Do YYYY, h:mm a")}
+                      />
+                    </div>
+                  )
+                }
+              })
+            }
           </div>
         </div>
       </Container>

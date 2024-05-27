@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactStars from "react-rating-stars-component"
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import prodcompare from '../images/prodcompare.svg'
 import wish from '../images/wish.svg'
 import wishlist from '../images/wishlist.svg'
@@ -14,6 +14,7 @@ import { addToWishList } from '../features/products/productSlice'
 const ProductCard = (props) => {
     const { data, grid } = props
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const addToWishListed = (id) => {
         dispatch(addToWishList(id))
     }
@@ -27,13 +28,7 @@ const ProductCard = (props) => {
                         <div
                             key={index}
                             className={`${location.pathname === '/product' ? `gr-${grid}` : 'col-3'}`}>
-                            <Link
-                                // to={`${location.pathname == '/'
-                                //     ? '/product/:id'
-                                //     : location.pathname == '/product/:id'
-                                //         ? '/product/:id'
-                                //         : ':id'
-                                //     }`}
+                            <div
                                 className='product-card position-relative'>
                                 {/* Add Wishlist */}
                                 <div className='wishlist-icon position-absolute'>
@@ -69,7 +64,6 @@ const ProductCard = (props) => {
                                     {/* Desc */}
                                     <p className={`description ${grid === 12 ? 'd-block' : 'd-none'}`}
                                         dangerouslySetInnerHTML={{ __html: item?.description }}>
-
                                     </p>
                                     {/* Price */}
                                     <p className='price'>$ {item?.price}</p>
@@ -80,14 +74,14 @@ const ProductCard = (props) => {
                                             <img src={prodcompare} alt='compare' />
                                         </button>
                                         <button className='border-0 bg-transparent'>
-                                            <img src={view} alt='view' />
+                                            <img onClick={() => navigate('/product/' + item?._id)} src={view} alt='view' />
                                         </button>
                                         <button className='border-0 bg-transparent'>
                                             <img src={addcart} alt='addcart' />
                                         </button>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         </div>
                     )
                 })
