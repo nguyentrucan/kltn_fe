@@ -30,6 +30,7 @@ const Checkout = () => {
         razorpayPaymentId: "",
         razorpayOrderId: "",
     })
+    const [cartProductState, setCartProductState] = useState([])
 
     console.log(cartState);
 
@@ -56,7 +57,9 @@ const Checkout = () => {
         onSubmit: (values) => {
             //alert(JSON.stringify(values))
             setShippingInfo(values)
-            checkoutHandler()
+            setTimeout(() => {
+                checkoutHandler()
+            }, 300)
         },
     })
 
@@ -70,7 +73,9 @@ const Checkout = () => {
                 price: cartState[index].price,
             })
         }
+        setCartProductState(items)
     }, [])
+
 
     const loadScript = (src) => {
         return new Promise((resolve) => {
@@ -92,7 +97,7 @@ const Checkout = () => {
             alert("Razorpay SDK Failed To Load")
             return
         }
-        const result = await axios.post("http://localhost:5000/api/user/order/checkout", "", config)
+        const result = await axios.post("http://localhost:5000/api/user/order/checkout", { amount: totalAmount + (totalAmount > 100 ? 0 : 5) }, config)
         if (!result) {
             alert("Something went wrong")
             return
@@ -125,7 +130,7 @@ const Checkout = () => {
                 dispatch(createAnOrder({
                     totalPrice: totalAmount,
                     totalPriceAfterDiscount: totalAmount,
-                    orderItems: [],
+                    orderItems: cartProductState,
                     paymentInfo,
                     shippingInfo,
                 }))
