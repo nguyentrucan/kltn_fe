@@ -52,10 +52,44 @@ const getCart = async () => {
     }
 }
 
+const removeProductFromCart = async (cartItemId) => {
+    const response = await axios.delete(
+        `${base_url}user/delete-product-cart/${cartItemId}`,
+        config
+    )
+    if (response.data) {
+        return response.data
+    }
+}
+
+const updateProductFromCart = async (cartDetail) => {
+    const response = await axios.delete(
+        `${base_url}user/update-product-cart/${cartDetail.cartItemId}/${cartDetail.quantity}`,
+        config
+    )
+    if (response.data) {
+        return response.data
+    }
+}
+
+const createOrder = async(orderDetail) => {
+    const response = await axios.post(
+        `${base_url}user/cart/create-order`,
+        orderDetail,
+        config
+    )
+    if (response.data) {
+        return response.data
+    }
+}
+
 export const authService = {
     register,
     login,
     getUserWishlist,
     addToCart,
-    getCart
+    getCart,
+    removeProductFromCart,
+    updateProductFromCart,
+    createOrder
 }

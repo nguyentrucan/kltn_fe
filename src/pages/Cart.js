@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import BreadCrumb from '../components/BreadCrumb'
 import Meta from '../components/Meta'
 import watch from '../images/watch.jpg'
@@ -7,14 +7,40 @@ import { Link } from 'react-router-dom'
 import Container from '../components/Container'
 import { } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserCart } from '../features/user/userSlice'
+import { deleteCartProduct, getUserCart, updateCartProduct } from '../features/user/userSlice'
 
 const Cart = () => {
     const dispatch = useDispatch()
+    const [productUpdateDetail, setProductUpdateDetail] = useState(null)
     const userCartState = useSelector(state => state.auth.cartProducts)
+    const [totalAmount, setTotalAmount] = useState(null)
     useEffect(() => {
         dispatch(getUserCart())
     }, [])
+    useEffect(() => {
+        if (productUpdateDetail !== null) {
+            dispatch(updateCartProduct({
+                cartItemId: productUpdateDetail?.cartItemId,
+                quantity: productUpdateDetail?.quantity
+            }))
+            setTimeout(() => {
+                dispatch(getUserCart())
+            }, 100)
+        }
+    }, [productUpdateDetail])
+    const deleteACartProduct = (id) => {
+        dispatch(deleteCartProduct(id))
+        setTimeout(() => {
+            dispatch(getUserCart())
+        }, 300)
+    }
+    useEffect(() => {
+        let sum = 0
+        for (let index = 0; index < userCartState?.length; index++) {
+            sum = sum + (Number(userCartState[index].quantity * userCartState[index].price))
+            setTotalAmount(sum)
+        }
+    }, [userCartState])
     return (
         <>
             <Meta title={'Cart'} />
@@ -50,10 +76,27 @@ const Cart = () => {
                                         </div>
                                         <div className='cart-col-3 d-flex align-items-center gap-15'>
                                             <div>
-                                                <input className='form-control' type='number' name='' min={1} max={100} id='' value={item?.quantity} />
+                                                <input
+                                                    className='form-control'
+                                                    type='number'
+                                                    name=''
+                                                    min={1}
+                                                    max={100}
+                                                    id=''
+                                                    value={productUpdateDetail?.quantity ? productUpdateDetail?.quantity : item?.quantity}
+                                                    onChange={(e) => {
+                                                        setProductUpdateDetail({
+                                                            cartItemId: item?._id,
+                                                            quantity: e.target.value
+                                                        })
+                                                    }} />
                                             </div>
                                             <div>
-                                                <AiFillDelete className='text-danger ' />
+                                                <AiFillDelete
+                                                    onClick={() => {
+                                                        deleteACartProduct(item?._id)
+                                                    }}
+                                                    className='text-danger ' />
                                             </div>
                                         </div>
                                         <div className='cart-col-4'>
@@ -68,11 +111,14 @@ const Cart = () => {
                     <div className='col-12 py-2 mt-4'>
                         <div className='d-flex justify-content-between align-items-baseline'>
                             <Link to='/product' className='button'>Continue To Shopping</Link>
-                            <div className='d-flex flex-column align-items-end'>
-                                <h4>SubTotal: $ 100</h4>
-                                <p>Taxes and shipping calculated at checkout</p>
-                                <Link to='/checkout' className='button'>Checkout</Link>
-                            </div>
+                            {
+                                (totalAmount !== null || totalAmount !== 0) &&
+                                <div className='d-flex flex-column align-items-end'>
+                                    <h4>SubTotal: $ {totalAmount}</h4>
+                                    <p>Taxes and shipping calculated at checkout</p>
+                                    <Link to='/checkout' className='button'>Checkout</Link>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
