@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { authService } from "./userService";
 import { toast } from "react-toastify";
 
@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk(
 )
 
 export const getUserProductWishlist = createAsyncThunk(
-    "auth/wishlist ",
+    "user/wishlist",
     async (thunkAPI) => {
         try {
             return await authService.getUserWishlist()
@@ -36,7 +36,7 @@ export const getUserProductWishlist = createAsyncThunk(
 )
 
 export const addProductToCart = createAsyncThunk(
-    "auth/cart/add ",
+    "user/cart/add",
     async (cartData, thunkAPI) => {
         try {
             return await authService.addToCart(cartData)
@@ -47,10 +47,32 @@ export const addProductToCart = createAsyncThunk(
 )
 
 export const getUserCart = createAsyncThunk(
-    "auth/cart/get ",
+    "user/cart/get",
+    async (data, thunkAPI) => {
+        try {
+            return await authService.getCart(data)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+const deleteUserCart = createAsyncThunk(
+    "user/cart/delete",
+    async (data, thunkAPI) => {
+        try {
+            return authService.emptyCart(data)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const getOrders = createAsyncThunk(
+    "user/orders/get",
     async (thunkAPI) => {
         try {
-            return await authService.getCart()
+            return await authService.getUserOrders()
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
@@ -58,21 +80,10 @@ export const getUserCart = createAsyncThunk(
 )
 
 export const deleteCartProduct = createAsyncThunk(
-    "auth/cart/product/delete ",
-    async (cartItemId, thunkAPI) => {
+    "user/cart/product/delete ",
+    async (data, thunkAPI) => {
         try {
-            return await authService.removeProductFromCart(cartItemId)
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error)
-        }
-    }
-)
-
-export const updateCartProduct = createAsyncThunk(
-    "auth/cart/product/update ",
-    async (cartDetail, thunkAPI) => {
-        try {
-            return await authService.updateProductFromCart(cartDetail)
+            return await authService.removeProductFromCart(data)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
@@ -80,7 +91,7 @@ export const updateCartProduct = createAsyncThunk(
 )
 
 export const createAnOrder = createAsyncThunk(
-    "auth/cart/create-order ",
+    "user/cart/create-order ",
     async (orderDetail, thunkAPI) => {
         try {
             return await authService.createOrder(orderDetail)
@@ -90,13 +101,56 @@ export const createAnOrder = createAsyncThunk(
     }
 )
 
+export const updateCartProduct = createAsyncThunk(
+    "user/cart/product/update ",
+    async (cartDetail, thunkAPI) => {
+        try {
+            return await authService.updateProductFromCart(cartDetail)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const updateProfile = createAsyncThunk(
+    "user/profile/update",
+    async (data, thunkAPI) => {
+        try {
+            return await authService.updateUser(data)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const forgotPasswordToken = createAsyncThunk(
+    "user/password/token",
+    async (data, thunkAPI) => {
+        try {
+            return await authService.forgotPasswordToken(data)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const resetPassword = createAsyncThunk(
+    "user/password/reset",
+    async (data, thunkAPI) => {
+        try {
+            return await authService.resetPass(data)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const resetState = createAction("Reset_all");
+
 const getCustomerfromLocalStorage = localStorage.getItem("customer") ? JSON.parse(localStorage.getItem("customer")) : null;
 
 const initialState = {
     user: getCustomerfromLocalStorage,
-    wishlist: [],
-    cartProduct: [],
-    cartProducts: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -127,7 +181,7 @@ export const authSlice = createSlice({
                 state.isSuccess = false
                 state.message = action.error
                 if (state.isError === true) {
-                    toast.error(action.error)
+                    toast.error(action.payload.response.data.message)
                 }
             })
             .addCase(loginUser.pending, (state) => {
@@ -149,7 +203,7 @@ export const authSlice = createSlice({
                 state.isSuccess = false
                 state.message = action.error
                 if (state.isError === true) {
-                    toast.error(action.error)
+                    toast.error(action.payload.response.data.message)
                 }
             })
             .addCase(getUserProductWishlist.pending, (state) => {
@@ -166,9 +220,6 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.isSuccess = false
                 state.message = action.error
-                if (state.isError === true) {
-                    toast.error(action.error)
-                }
             })
             .addCase(addProductToCart.pending, (state) => {
                 state.isLoading = true
@@ -187,9 +238,6 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.isSuccess = false
                 state.message = action.error
-                if (state.isError === true) {
-                    toast.error(action.error)
-                }
             })
             .addCase(getUserCart.pending, (state) => {
                 state.isLoading = true
@@ -205,9 +253,6 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.isSuccess = false
                 state.message = action.error
-                if (state.isError === true) {
-                    toast.error(action.error)
-                }
             })
             .addCase(deleteCartProduct.pending, (state) => {
                 state.isLoading = true
@@ -216,7 +261,7 @@ export const authSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.isSuccess = true
-                state.deleteCartProduct = action.payload
+                state.deletedCartProduct = action.payload
                 if (state.isSuccess === true) {
                     toast.success("Remove Product Successfully !")
                 }
@@ -237,10 +282,7 @@ export const authSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.isSuccess = true
-                state.updateCartProduct = action.payload
-                // if (state.isSuccess === true) {
-                //     toast.success("Remove Product Successfully !")
-                // }
+                state.updatedCartProduct = action.payload
             })
             .addCase(updateCartProduct.rejected, (state, action) => {
                 state.isLoading = false
@@ -272,6 +314,111 @@ export const authSlice = createSlice({
                     toast.error("Something went wrong !")
                 }
             })
+            .addCase(getOrders.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getOrders.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.getorderedProduct = action.payload
+            })
+            .addCase(getOrders.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.isSuccess = false
+                state.message = action.error
+            })
+            .addCase(updateProfile.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.updatedUser = action.payload
+                if (state.isSuccess === true) {
+                    let currentUserData = JSON.parse(localStorage.getItem("customer"));
+                    let newUserData = {
+                        _id: currentUserData?._id,
+                        token: currentUserData.token,
+                        fistname: action?.payload?.fistname,
+                        lastname: action?.payload?.lastname,
+                        email: action?.payload?.email,
+                        mobile: action?.payload?.mobile,
+                    }
+                    localStorage.setItem('customer', JSON.stringify(newUserData));
+                    state.user = newUserData;
+                    toast.success("Profile Updated Successfully!")
+                }
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.isSuccess = false
+                state.message = action.error
+                if (state.isError === true) {
+                    toast.error("Something went wrong !")
+                }
+            })
+            .addCase(forgotPasswordToken.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(forgotPasswordToken.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.token = action.payload
+                if (state.isSuccess === true) {
+                    toast.success("Forgot Password Email Sent Successfully !")
+                }
+            })
+            .addCase(forgotPasswordToken.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.isSuccess = false
+                state.message = action.error
+                if (state.isError === true) {
+                    toast.error("Something went wrong !")
+                }
+            })
+            .addCase(resetPassword.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.pass = action.payload
+                if (state.isSuccess === true) {
+                    toast.success("Password Changed Successfully !")
+                }
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.isSuccess = false
+                state.message = action.error
+                if (state.isError === true) {
+                    toast.error("Something went wrong !")
+                }
+            })
+            .addCase(deleteUserCart.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(deleteUserCart.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isError = false
+                state.isSuccess = true
+                state.deletedCart = action.payload
+            })
+            .addCase(deleteUserCart.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.isSuccess = false
+                state.message = action.error
+            })
+            .addCase(resetState, () => initialState)
     }
 })
 

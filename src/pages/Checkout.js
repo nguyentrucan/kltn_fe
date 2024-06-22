@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
-import watch from '../images/watch.jpg'
+import { Link, useNavigate } from 'react-router-dom'
 import Container from '../components/Container'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import axios from 'axios'
 import { config } from '../utils/axiosConfig'
-import { createAnOrder } from '../features/user/userSlice'
+import { createAnOrder, getUserCart, resetState } from '../features/user/userSlice'
 
 const shippingSchema = yup.object({
     firstName: yup.string().required("First Name is required"),
@@ -22,7 +21,8 @@ const shippingSchema = yup.object({
 
 const Checkout = () => {
     const dispatch = useDispatch()
-    const cartState = useSelector(state => state.auth.cartProducts)
+    const cartState = useSelector((state) => state?.auth?.cartProducts)
+    const authState = useSelector((state) => state?.auth)
     const [totalAmount, setTotalAmount] = useState(null)
 
     const [shippingInfo, setShippingInfo] = useState(null)
@@ -30,17 +30,42 @@ const Checkout = () => {
         razorpayPaymentId: "",
         razorpayOrderId: "",
     })
-    const [cartProductState, setCartProductState] = useState([])
 
-    console.log(cartState);
+    const navigate = useNavigate()
 
     useEffect(() => {
         let sum = 0
-        for (let index = 0; index < cartState.length; index++) {
+        for (let index = 0; index < cartState?.length; index++) {
             sum = sum + (Number(cartState[index].quantity) * cartState[index].price)
             setTotalAmount(sum)
         }
     }, [cartState])
+
+    const getTokenFromLocalStorage = localStorage.getItem("customer")
+        ? JSON.parse(localStorage.getItem("customer"))
+        : null;
+
+    const config2 = {
+        headers: {
+            Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+                }`,
+            Accept: "application/json"
+        },
+    };
+
+    useEffect(() => {
+        dispatch(getUserCart(config2))
+    }, [])
+
+    useEffect(() => {
+        if (authState?.orderedProduct?.order !== null &&
+            authState?.orderedProduct?.success === true
+        ) {
+            navigate("/my-orders")
+        }
+    }, [authState])
+
+    const [cartProductState, setCartProductState] = useState([])
 
     const formik = useFormik({
         initialValues: {
@@ -57,25 +82,11 @@ const Checkout = () => {
         onSubmit: (values) => {
             //alert(JSON.stringify(values))
             setShippingInfo(values)
-            setTimeout(() => {
-                checkoutHandler()
-            }, 300)
+            // setTimeout(() => {
+            //     checkoutHandler()
+            // }, 300)
         },
     })
-
-    useEffect(() => {
-        let items = []
-        for (let index = 0; index < cartState?.length; index++) {
-            items.push({
-                product: cartState[index].productId._id,
-                quantity: cartState[index].quantity,
-                color: cartState[index].color,
-                price: cartState[index].price,
-            })
-        }
-        setCartProductState(items)
-    }, [])
-
 
     const loadScript = (src) => {
         return new Promise((resolve) => {
@@ -90,6 +101,19 @@ const Checkout = () => {
             document.body.appendChild(script)
         })
     }
+
+    useEffect(() => {
+        let items = []
+        for (let index = 0; index < cartState?.length; index++) {
+            items.push({
+                product: cartState[index].productId._id,
+                quantity: cartState[index].quantity,
+                color: cartState[index].color._id,
+                price: cartState[index].price,
+            })
+        }
+        setCartProductState(items)
+    }, [])
 
     const checkoutHandler = async () => {
         const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js")
@@ -106,7 +130,7 @@ const Checkout = () => {
         const { amount, id: order_id, currency } = result.data.order
 
         const options = {
-            key: "rzp_test_jk96M1tbCBGW2H", // Enter the Key ID generated from the Dashboard
+            key: "rzp_test_HSSeDI22muUrLR", // Enter the Key ID generated from the Dashboard
             amount: amount,
             currency: currency,
             name: "Nguyen An",
@@ -122,18 +146,16 @@ const Checkout = () => {
 
                 const result = await axios.post("http://localhost:5000/api/user/order/paymentVerification", data, config);
 
-                setPaymentInfo({
-                    razorpayPaymentId: response.razorpay_payment_id,
-                    razorpayOrderId: response.razorpay_order_id,
-                })
-
                 dispatch(createAnOrder({
                     totalPrice: totalAmount,
                     totalPriceAfterDiscount: totalAmount,
                     orderItems: cartProductState,
-                    paymentInfo,
-                    shippingInfo,
+                    paymentInfo: result.data,
+                    shippingInfo: JSON.parse(localStorage.getItem("address")),
                 }))
+                //dispatch(deleteUserCart(config2))
+                localStorage.removeItem("address")
+                dispatch(resetState())
             },
             prefill: {
                 name: "Nguyen An",

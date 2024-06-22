@@ -3,7 +3,7 @@ import { productService } from "./productService";
 import { toast } from "react-toastify";
 
 export const getAllProducts = createAsyncThunk(
-    "product/get-products",
+    "product/get",
     async (thunkAPI) => {
         try {
             return await productService.getProducts()
@@ -14,10 +14,10 @@ export const getAllProducts = createAsyncThunk(
 )
 
 export const getProduct = createAsyncThunk(
-    "product/get-product",
+    "product/getAProduct",
     async (id, thunkAPI) => {
         try {
-            return await productService.getProduct(id)
+            return await productService.getSingleProduct(id)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
@@ -35,8 +35,19 @@ export const addToWishList = createAsyncThunk(
     }
 )
 
+export const addRating = createAsyncThunk(
+    "product/rating",
+    async (data, thunkAPI) => {
+        try {
+            return await productService.rateProduct(data)
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
 const productState = {
-    products: [],
+    products: "",
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -44,7 +55,7 @@ const productState = {
 }
 
 export const productSlice = createSlice({
-    name: "products",
+    name: "product",
     initialState: productState,
     reducers: {},
     extraReducers: (builder) => {
@@ -56,7 +67,7 @@ export const productSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.isSuccess = true
-                state.products = action.payload
+                state.product = action.payload
             })
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.isLoading = false
@@ -73,7 +84,7 @@ export const productSlice = createSlice({
                 state.isSuccess = true
                 state.addToWishList = action.payload
                 if (state.isSuccess === true) {
-                    toast.info("Product Added Successfully !")
+                    toast.info("Product Added to Wishlist Successfully !")
                 }
             })
             .addCase(addToWishList.rejected, (state, action) => {
@@ -89,7 +100,7 @@ export const productSlice = createSlice({
                 state.isLoading = false
                 state.isError = false
                 state.isSuccess = true
-                state.product = action.payload
+                state.singleproduct = action.payload
                 state.message = 'Product Fetched Successfully !'
             })
             .addCase(getProduct.rejected, (state, action) => {
@@ -98,6 +109,25 @@ export const productSlice = createSlice({
                 state.isSuccess = false
                 state.message = action.error
             })
+            .addCase(addRating.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(addRating.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.rating = action.payload;
+                state.message = "Rating Added Successfully";
+                if (state.isSuccess) {
+                    toast.success("Rating Added Successfully");
+                }
+            })
+            .addCase(addRating.rejected, (state, action) => {
+                state.isError = true;
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.message = action.error;
+            });
     }
 })
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Meta from '../components/Meta'
 import BreadCrumb from '../components/BreadCrumb'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Container from '../components/Container'
 import CustomInput from '../components/CustomInput'
 import { useFormik } from 'formik'
@@ -16,6 +16,8 @@ const loginSchema = yup.object({
 
 
 const Login = () => {
+    const authState = useSelector(state => state.auth)
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
@@ -26,6 +28,9 @@ const Login = () => {
         onSubmit: (values) => {
             //alert(JSON.stringify(values))
             dispatch(loginUser(values))
+            if (authState.isSuccess) {
+                navigate("/")
+            }
         }
     })
 
@@ -70,7 +75,7 @@ const Login = () => {
                                     <div className='mt-3 d-flex justify-content-center gap-15 align-items-center'>
                                         {/* Button Login */}
                                         <button className='button border-0' type='submit'>Login</button>
-                                        
+
                                         {/* Button Signup */}
                                         <Link to='/signup' className='button signup'>Signup</Link>
                                     </div>

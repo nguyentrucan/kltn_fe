@@ -10,13 +10,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteCartProduct, getUserCart, updateCartProduct } from '../features/user/userSlice'
 
 const Cart = () => {
+    const getTokenFromLocalStorage = localStorage.getItem("customer")
+        ? JSON.parse(localStorage.getItem("customer"))
+        : null
+    const config2 = {
+        headers: {
+            Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+                }`,
+            Accept: "application/json"
+        },
+    }
+
     const dispatch = useDispatch()
     const [productUpdateDetail, setProductUpdateDetail] = useState(null)
     const userCartState = useSelector(state => state.auth.cartProducts)
     const [totalAmount, setTotalAmount] = useState(null)
+
     useEffect(() => {
-        dispatch(getUserCart())
-    }, [])
+        dispatch(getUserCart(config2))
+    }, [dispatch, config2])
+
     useEffect(() => {
         if (productUpdateDetail !== null) {
             dispatch(updateCartProduct({
@@ -24,15 +37,16 @@ const Cart = () => {
                 quantity: productUpdateDetail?.quantity
             }))
             setTimeout(() => {
-                dispatch(getUserCart())
-            }, 100)
+                dispatch(getUserCart(config2))
+            }, 200)
         }
-    }, [productUpdateDetail])
+    }, [dispatch, productUpdateDetail, config2])
+
     const deleteACartProduct = (id) => {
-        dispatch(deleteCartProduct(id))
+        dispatch(deleteCartProduct({ id: id, config2: config2 }))
         setTimeout(() => {
-            dispatch(getUserCart())
-        }, 300)
+            dispatch(getUserCart(config2))
+        }, 200)
     }
     useEffect(() => {
         let sum = 0
