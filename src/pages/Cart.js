@@ -28,6 +28,10 @@ const Cart = () => {
     const userCartState = useSelector((state) => state?.auth?.cartProducts)
 
     useEffect(() => {
+        dispatch(getUserCart(config2))
+    }, [])
+
+    useEffect(() => {
         if (productUpdateDetail !== null) {
             dispatch(updateCartProduct({
                 cartItemId: productUpdateDetail?.cartItemId,
@@ -37,7 +41,7 @@ const Cart = () => {
                 dispatch(getUserCart(config2))
             }, 200)
         }
-    }, [dispatch, productUpdateDetail, config2])
+    }, [productUpdateDetail])
 
     const deleteACartProduct = (id) => {
         dispatch(deleteCartProduct({ id: id, config2: config2 }))
@@ -52,10 +56,6 @@ const Cart = () => {
             setTotalAmount(sum)
         }
     }, [userCartState])
-    
-    useEffect(() => {
-        dispatch(getUserCart(config2))
-    }, [dispatch, config2])
 
     return (
         <>

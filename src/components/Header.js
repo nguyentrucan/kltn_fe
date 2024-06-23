@@ -123,18 +123,45 @@ const Header = () => {
                     <p className='mb-0'>Favourite <br /> Wishlist</p>
                   </Link>
                 </div>
-                <div>
+                {/* <div>
                   <Link
                     to={authState?.user === null ? '/login' : "my-profile"}
                     className='d-flex align-items-center gap-10 text-white'>
                     <img src={user} alt='user' />
                     {
-                      authState?.user === null ?
-                        <p className='mb-0'>Login <br /> My Account</p>
+                      authState?.user === null
+                        ? <p className='mb-0'>Login <br /> My Account</p>
                         : <p className='mb-0'>Welcome <br /> {authState?.user?.firstname}</p>
                     }
                   </Link>
-                </div>
+                </div> */}
+
+                {
+                  authState?.user === null
+                    ?
+                    <div>
+                      <Link
+                        className='d-flex align-items-center gap-10 text-white'
+                        to='/login'>
+                        <img src={user} alt='user' />
+                        <p className='mb-0'>Login</p>
+                      </Link>
+                    </div>
+                    :
+                    <div>
+                      <div className="dropdown">
+                        <button className="btn btn-secondary dropdown-toggle bg-transparent border-0 gap-10 d-flex align-items-center" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src={user} alt='user' />
+                          <span className='mb-0'>Welcome <br /> {authState?.user?.firstname}</span>
+                        </button>
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li><Link className="dropdown-item text-dark" to="/my-profile">My Profile</Link></li>
+                          <li><button className="dropdown-item text-dark" onClick={handleLogout}>Logout</button></li>
+                        </ul>
+                      </div>
+                    </div>
+                }
+
                 <div>
                   <Link to='/cart' className='d-flex align-items-center gap-10 text-white'>
                     <img src={cart} alt='cart' />
@@ -188,7 +215,7 @@ const Header = () => {
                     <NavLink to='/my-orders'>My Orders</NavLink>
                     <NavLink to='/blogs'>Blogs</NavLink>
                     <NavLink to='/contact'>Contact</NavLink>
-                    {authState?.user !== null ? (
+                    {/* {authState?.user !== null ? (
                       <button
                         className="border border-0 bg-trasparent text-white text-uppercase"
                         type="button"
@@ -199,7 +226,7 @@ const Header = () => {
                       </button>
                     ) : (
                       ""
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>

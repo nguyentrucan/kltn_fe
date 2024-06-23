@@ -8,10 +8,11 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { config } from '../utils/axiosConfig'
 import { createAnOrder, getUserCart, resetState } from '../features/user/userSlice'
+import Meta from '../components/Meta'
 
 const shippingSchema = yup.object({
-    firstName: yup.string().required("First Name is required"),
-    lastName: yup.string().required("Last Name is required"),
+    firstname: yup.string().required("First Name is required"),
+    lastname: yup.string().required("Last Name is required"),
     address: yup.string().required("Address Details are required"),
     state: yup.string().required("State are required"),
     city: yup.string().required("City are required"),
@@ -36,7 +37,7 @@ const Checkout = () => {
     useEffect(() => {
         let sum = 0
         for (let index = 0; index < cartState?.length; index++) {
-            sum = sum + (Number(cartState[index].quantity) * cartState[index].price)
+            sum = sum + Number(cartState[index].quantity) * cartState[index].price
             setTotalAmount(sum)
         }
     }, [cartState])
@@ -69,8 +70,8 @@ const Checkout = () => {
 
     const formik = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
+            firstname: "",
+            lastname: "",
             address: "",
             state: "",
             city: "",
@@ -82,9 +83,10 @@ const Checkout = () => {
         onSubmit: (values) => {
             //alert(JSON.stringify(values))
             setShippingInfo(values)
-            // setTimeout(() => {
-            //     checkoutHandler()
-            // }, 300)
+            localStorage.setItem("address", JSON.stringify(values))
+            setTimeout(() => {
+                checkoutHandler()
+            }, 300)
         },
     })
 
@@ -176,6 +178,7 @@ const Checkout = () => {
 
     return (
         <>
+            <Meta title={"Checkout"} />
             <Container class1='checkout-wrapper py-5 home-wrapper-2'>
                 <div className='row'>
                     <div className='col-7'>
@@ -237,28 +240,28 @@ const Checkout = () => {
                                 {/* First name */}
                                 <div className='flex-grow-1'>
                                     <input
-                                        name='firstName'
-                                        value={formik.values.firstName}
-                                        onChange={formik.handleChange("firstName")}
-                                        onBlur={formik.handleBlur("firstName")}
+                                        name='firstname'
+                                        value={formik.values.firstname}
+                                        onChange={formik.handleChange("firstname")}
+                                        onBlur={formik.handleBlur("firstname")}
                                         type='text'
                                         placeholder='First Name' className='form-control' />
                                     <div className='error ms-2 my-1'>
-                                        {formik.touched.firstName && formik.errors.firstName}
+                                        {formik.touched.firstname && formik.errors.firstname}
                                     </div>
                                 </div>
 
                                 {/* Last name */}
                                 <div className='flex-grow-1'>
                                     <input
-                                        name='lastName'
-                                        value={formik.values.lastName}
-                                        onChange={formik.handleChange("lastName")}
-                                        onBlur={formik.handleBlur("lastName")}
+                                        name='lastname'
+                                        value={formik.values.lastname}
+                                        onChange={formik.handleChange("lastname")}
+                                        onBlur={formik.handleBlur("lastname")}
                                         type='text'
                                         placeholder='Last Name' className='form-control' />
                                     <div className='error ms-2 my-1'>
-                                        {formik.touched.lastName && formik.errors.lastName}
+                                        {formik.touched.lastname && formik.errors.lastname}
                                     </div>
                                 </div>
 

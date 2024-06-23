@@ -21,7 +21,7 @@ const loginSchema = yup.object({
 
 
 const Login = () => {
-    const authState = useSelector((state) => state.auth)
+    const authState = useSelector((state) => state?.auth)
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {

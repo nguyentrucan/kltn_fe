@@ -24,6 +24,7 @@ import Checkout from './pages/Checkout';
 import { PrivateRoutes } from './routing/PrivateRoutes';
 import { OpenRoutes } from './routing/OpenRoutes';
 import Orders from './pages/Orders';
+import Profile from './pages/Profile';
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
             <Route path='blog/:id' element={<SingleBlog />} />
             <Route path='cart' element={<PrivateRoutes><Cart /></PrivateRoutes>} />
             <Route path='my-orders' element={<PrivateRoutes><Orders /></PrivateRoutes>} />
+            <Route path='my-profile' element={<PrivateRoutes><Profile /></PrivateRoutes>} />
             <Route path='checkout' element={<PrivateRoutes><Checkout /></PrivateRoutes>} />
             <Route path='compare-product' element={<CompareProduct />} />
             <Route path='wishlist' element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
