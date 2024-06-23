@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BreadCrumb from '../components/BreadCrumb'
 import Meta from '../components/Meta'
-import watch from '../images/watch.jpg'
 import { AiFillDelete } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 import Container from '../components/Container'
@@ -13,6 +12,7 @@ const Cart = () => {
     const getTokenFromLocalStorage = localStorage.getItem("customer")
         ? JSON.parse(localStorage.getItem("customer"))
         : null
+
     const config2 = {
         headers: {
             Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
@@ -22,13 +22,10 @@ const Cart = () => {
     }
 
     const dispatch = useDispatch()
-    const [productUpdateDetail, setProductUpdateDetail] = useState(null)
-    const userCartState = useSelector(state => state.auth.cartProducts)
-    const [totalAmount, setTotalAmount] = useState(null)
 
-    useEffect(() => {
-        dispatch(getUserCart(config2))
-    }, [dispatch, config2])
+    const [productUpdateDetail, setProductUpdateDetail] = useState(null)
+    const [totalAmount, setTotalAmount] = useState(null)
+    const userCartState = useSelector((state) => state?.auth?.cartProducts)
 
     useEffect(() => {
         if (productUpdateDetail !== null) {
@@ -55,6 +52,11 @@ const Cart = () => {
             setTotalAmount(sum)
         }
     }, [userCartState])
+    
+    useEffect(() => {
+        dispatch(getUserCart(config2))
+    }, [dispatch, config2])
+
     return (
         <>
             <Meta title={'Cart'} />
@@ -69,17 +71,25 @@ const Cart = () => {
                             <h4 className='cart-col-4'>Total</h4>
                         </div>
                         {
-                            userCartState && userCartState?.map((item, index) => {
+                            userCartState 
+                            && userCartState.map((item, index) => {
                                 return (
                                     <div
                                         key={index}
                                         className='cart-data py-3 mb-2 d-flex justify-content-between align-items-center'>
                                         <div className='cart-col-1 gap-15 d-flex align-items-center'>
                                             <div className='w-25'>
-                                                <img src={watch} className='img-fluid' alt='product image' />
+                                                <img
+                                                    src={
+                                                        item?.productId?.images?.[0]?.url ||
+                                                        "default-image-url"
+                                                    }
+                                                    className="img-fluid"
+                                                    alt="product image"
+                                                />
                                             </div>
                                             <div className='w-75'>
-                                                <p>{item?.productId.title}</p>
+                                                <p>{item?.productId?.title}</p>
                                                 <p className='d-flex gap-3'>Color: <ul className='colors ps-0'>
                                                     <li style={{ backgroundColor: item?.color?.title }}></li>
                                                 </ul></p>
@@ -93,11 +103,11 @@ const Cart = () => {
                                                 <input
                                                     className='form-control'
                                                     type='number'
-                                                    name=''
+                                                    name={"quantity" + item?._id}
                                                     min={1}
                                                     max={100}
-                                                    id=''
-                                                    value={productUpdateDetail?.quantity ? productUpdateDetail?.quantity : item?.quantity}
+                                                    id={"card" + item?._id}
+                                                    value={item?.quantity}
                                                     onChange={(e) => {
                                                         setProductUpdateDetail({
                                                             cartItemId: item?._id,
@@ -110,7 +120,7 @@ const Cart = () => {
                                                     onClick={() => {
                                                         deleteACartProduct(item?._id)
                                                     }}
-                                                    className='text-danger ' />
+                                                    className='text-danger' />
                                             </div>
                                         </div>
                                         <div className='cart-col-4'>
@@ -127,11 +137,11 @@ const Cart = () => {
                             <Link to='/product' className='button'>Continue To Shopping</Link>
                             {
                                 (totalAmount !== null || totalAmount !== 0) &&
-                                <div className='d-flex flex-column align-items-end'>
+                                (<div className='d-flex flex-column align-items-end'>
                                     <h4>SubTotal: $ {totalAmount}</h4>
                                     <p>Taxes and shipping calculated at checkout</p>
                                     <Link to='/checkout' className='button'>Checkout</Link>
-                                </div>
+                                </div>)
                             }
                         </div>
                     </div>

@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Meta from '../components/Meta'
 import BreadCrumb from '../components/BreadCrumb'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Container from '../components/Container'
 import CustomInput from '../components/CustomInput'
 import { useFormik } from 'formik'
@@ -10,14 +10,18 @@ import * as yup from "yup"
 import { loginUser } from '../features/user/userSlice'
 
 const loginSchema = yup.object({
-    email: yup.string().email("Email should be valid").required("Email is required !"),
-    password: yup.string().required("Password is required !"),
+    email: yup
+        .string()
+        .email("Email should be valid")
+        .required("Email is required !"),
+    password: yup
+        .string()
+        .required("Password is required !"),
 })
 
 
 const Login = () => {
-    const authState = useSelector(state => state.auth)
-    const navigate = useNavigate()
+    const authState = useSelector((state) => state.auth)
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
@@ -28,11 +32,17 @@ const Login = () => {
         onSubmit: (values) => {
             //alert(JSON.stringify(values))
             dispatch(loginUser(values))
-            if (authState.isSuccess) {
-                navigate("/")
-            }
+            // if (authState.isSuccess) {
+            //     navigate("/")
+            // }
         }
     })
+
+    useEffect(() => {
+        if (authState.user !== null && authState.isError === false) {
+            window.location.href = "/"
+        }
+    }, [authState])
 
     return (
         <>
@@ -43,7 +53,11 @@ const Login = () => {
                     <div className='col-12'>
                         <div className='auth-card'>
                             <h3 className='text-center mb-3'>Login</h3>
-                            <form action='' onSubmit={formik.handleSubmit} className='d-flex flex-column gap-15'>
+                            <form
+                                action=''
+                                onSubmit={formik.handleSubmit}
+                                className='d-flex flex-column gap-15'>
+
                                 {/* Email */}
                                 <CustomInput
                                     type='email'

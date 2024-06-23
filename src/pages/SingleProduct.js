@@ -5,7 +5,6 @@ import ProductCard from '../components/ProductCard'
 import ReactStars from "react-rating-stars-component"
 import ReactImageZoom from 'react-image-zoom'
 import Color from '../components/Color'
-import { TbGitCompare } from 'react-icons/tb'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import Container from '../components/Container'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -30,9 +29,21 @@ const SingleProduct = () => {
     const rat = productState?.totalrating
     const wishlistState = useSelector((state) => state?.auth?.wishlist?.wishlist)
 
+    const getTokenFromLocalStorage = localStorage.getItem("customer")
+        ? JSON.parse(localStorage.getItem("customer"))
+        : null
+
+    const config2 = {
+        headers: {
+            Authorization: `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+                }`,
+            Accept: "application/json"
+        },
+    }
+
     useEffect(() => {
         dispatch(getProduct(getProductId))
-        dispatch(getUserCart())
+        dispatch(getUserCart(config2))
         dispatch(getAllProducts())
     }, [])
 
@@ -62,7 +73,9 @@ const SingleProduct = () => {
         width: 594,
         height: 600,
         zoomWidth: 600,
-        img: productState?.images[0]?.url ? productState?.images[0]?.url : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg"
+        img: productState?.images[0]?.url
+            ? productState?.images[0]?.url
+            : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg"
     };
     const [orderedProduct, setorderedProduct] = useState(true)
     const copyToClipboard = (text) => {
@@ -80,8 +93,8 @@ const SingleProduct = () => {
 
     useEffect(() => {
         let data = [];
-        for (let index = 0; index < productState?.length; index++) {
-            const element = productState[index];
+        for (let index = 0; index < productsState?.length; index++) {
+            const element = productsState[index];
             if (element.tags === "popular") {
                 data.push(element)
             } else {
@@ -150,7 +163,12 @@ const SingleProduct = () => {
                             <div className='border-bottom py-3'>
                                 <p className='price'>$ {productState?.price}</p>
                                 <div className='d-flex align-items-center gap-10'>
-                                    <ReactStars count={5} size={24} value={productState?.totalrating.toString()} edit={false} activeColor="#ffd700" />
+                                    <ReactStars
+                                        count={5}
+                                        size={24}
+                                        value={productState?.totalrating.toString()}
+                                        edit={false}
+                                        activeColor="#ffd700" />
                                     <p className='mb-0 t-review'>({productState?.ratings?.length} {productState?.ratings?.length > 1 ? "Reviews" : "Review"})</p>
                                 </div>
                                 <a className='review-btn' href='#review'>Write a Review</a>
@@ -176,7 +194,9 @@ const SingleProduct = () => {
                                     alreadyAdded === false && <>
                                         <div className='d-flex gap-10 flex-column mt-2 mb-3'>
                                             <h3 className='product-heading'>Color :</h3>
-                                            <Color setColor={setColor} colorData={productState?.color} />
+                                            <Color
+                                                setColor={setColor}
+                                                colorData={productState?.color} />
                                         </div>
                                     </>
                                 }
